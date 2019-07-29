@@ -1,6 +1,5 @@
 package com.capelania.config.security;
 
-import com.capelania.config.TokenHandler;
 import com.capelania.model.User;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;

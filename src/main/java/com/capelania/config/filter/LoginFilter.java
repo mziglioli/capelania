@@ -1,6 +1,5 @@
 package com.capelania.config.filter;
 
-import com.capelania.config.exception.GlobalExceptionHandler;
 import com.capelania.config.security.TokenAuthenticationService;
 import com.capelania.form.LoginForm;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,7 +8,6 @@ import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -44,9 +42,4 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 //		ObjectMapper mapper = new ObjectMapper();
 //		response.getOutputStream().println(mapper.writeValueAsString(userDetailsService.loadUserByUsername(authResult.getName())));
 	}
-
-//	@Override
-//	protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
-//		globalExceptionHandler.handleAuthenticationException(request, response, failed);
-//	}
 }

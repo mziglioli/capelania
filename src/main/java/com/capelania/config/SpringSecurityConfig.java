@@ -23,36 +23,19 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-            .csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and().authorizeRequests()
-                .antMatchers("/public/**", "/favicon.ico", "/swagger-resources").permitAll()
-                .antMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
-                .anyRequest().authenticated()
-            .and()
-                .addFilterBefore(new LoginFilter(tokenAuthenticationService, authenticationManager(), objectMapper), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new AuthenticationFilter(tokenAuthenticationService), UsernamePasswordAuthenticationFilter.class)
-            .exceptionHandling().accessDeniedHandler(accessDeniedHandler()).authenticationEntryPoint(authenticationEntryPoint())
-
-        ;
-    }
+    @Autowired
+    private TokenAuthenticationService tokenAuthenticationService;
+    @Autowired
+    private ObjectMapper objectMapper;
+    @Autowired
+    private GlobalExceptionHandler globalExceptionHandler;
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth
             .userDetailsService(userDetailsService())
-            .passwordEncoder(encoder())
-        ;
+            .passwordEncoder(encoder());
     }
-
-    @Autowired
-    TokenAuthenticationService tokenAuthenticationService;
-    @Autowired
-    ObjectMapper objectMapper;
-    @Autowired
-    GlobalExceptionHandler globalExceptionHandler;
 
     @Bean
     public BCryptPasswordEncoder encoder() {
@@ -68,8 +51,23 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     public AccessDeniedHandlerImpl accessDeniedHandler() {
         return new AccessDeniedHandlerImpl();
     }
+
     @Bean
     public AuthenticationEntryPointImpl authenticationEntryPoint() {
         return new AuthenticationEntryPointImpl();
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+            .csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and().authorizeRequests()
+                .antMatchers("/public/**", "/favicon.ico", "/swagger-resources").permitAll()
+                .antMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
+                .anyRequest().authenticated()
+            .and()
+                .addFilterBefore(new LoginFilter(tokenAuthenticationService, authenticationManager(), objectMapper), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new AuthenticationFilter(tokenAuthenticationService), UsernamePasswordAuthenticationFilter.class)
+            .exceptionHandling().accessDeniedHandler(accessDeniedHandler()).authenticationEntryPoint(authenticationEntryPoint());
     }
 }

@@ -1,4 +1,4 @@
-package com.capelania.config;
+package com.capelania.config.security;
 
 import com.capelania.model.User;
 import com.capelania.service.UserService;
@@ -19,13 +19,18 @@ public class TokenHandler {
 	private UserService userService;
 
 	public User parseUserFromToken(String token) {
-		String username = Jwts.parser().setSigningKey(Keys.hmacShaKeyFor(secret.getBytes())).parseClaimsJws(token).getBody()
-				.getSubject();
+		String username = Jwts.parser()
+			.setSigningKey(Keys.hmacShaKeyFor(secret.getBytes()))
+			.parseClaimsJws(token)
+			.getBody()
+			.getSubject();
 		return userService.findByUsername(username);
 	}
 
 	public String createTokenForUser(String username) {
-		return Jwts.builder().setSubject(username)
-			.signWith(Keys.hmacShaKeyFor(secret.getBytes()), SignatureAlgorithm.HS512).compact();
+		return Jwts.builder()
+			.setSubject(username)
+			.signWith(Keys.hmacShaKeyFor(secret.getBytes()), SignatureAlgorithm.HS512)
+			.compact();
 	}
 }
