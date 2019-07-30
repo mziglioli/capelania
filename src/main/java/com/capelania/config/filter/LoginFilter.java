@@ -46,7 +46,7 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 //		CsrfHeaderFilter.addCsrfCookie(response);
 		response.setStatus(HttpStatus.OK.value());
 		try {
-			response.getOutputStream().println(objectMapper.writeValueAsString(DefaultResponse.builder().success(true).build()));
+			response.getOutputStream().println(objectMapper.writeValueAsString(DefaultResponse.builder().data(authResult.getPrincipal()).success(true).build()));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

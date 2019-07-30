@@ -11,5 +11,6 @@ import lombok.Setter;
 public class DefaultResponse {
 
 	private boolean success;
+	private Object data;
 	private List<Error> errors;
 }

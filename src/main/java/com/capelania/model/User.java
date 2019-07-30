@@ -79,6 +79,7 @@ public class User extends EntityJpa implements UserDetails {
     }
 
     @Override
+	@JsonIgnore
     public String getUsername() {
         return email;
     }
