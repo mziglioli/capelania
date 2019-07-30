@@ -38,7 +38,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @ToString(callSuper = false, of = { "id", "name", "email", "status", "active" })
 @Entity
 @Table(name = "user", uniqueConstraints = { @UniqueConstraint(columnNames = { "email" }) })
-public class User implements UserDetails {
+public class User extends EntityJpa implements UserDetails {
 
 	@Id
 	@Column
@@ -63,9 +63,6 @@ public class User implements UserDetails {
 	@Enumerated(EnumType.STRING)
 	private Status status;
 
-	@Column
-	private boolean active;
-
 	@ManyToMany(cascade= CascadeType.MERGE, fetch = FetchType.EAGER)
 	@JoinTable(
 		name="user_role",
@@ -87,21 +84,25 @@ public class User implements UserDetails {
     }
 
     @Override
+	@JsonIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+	@JsonIgnore
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
+	@JsonIgnore
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
+	@JsonIgnore
     public boolean isEnabled() {
         return isActive();
     }

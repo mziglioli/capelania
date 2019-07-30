@@ -2,6 +2,7 @@ package com.capelania.config.filter;
 
 import com.capelania.config.security.TokenAuthenticationService;
 import com.capelania.form.LoginForm;
+import com.capelania.response.DefaultResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import javax.servlet.FilterChain;
@@ -12,6 +13,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -28,10 +30,14 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 	}
 
 	@Override
-	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException {
-		final LoginForm form = objectMapper.readValue(request.getInputStream(), LoginForm.class);
-		final UsernamePasswordAuthenticationToken loginToken = new UsernamePasswordAuthenticationToken(form.getEmail(), form.getPassword());
-		return getAuthenticationManager().authenticate(loginToken);
+	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+		try {
+			final LoginForm form = objectMapper.readValue(request.getInputStream(), LoginForm.class);
+			final UsernamePasswordAuthenticationToken loginToken = new UsernamePasswordAuthenticationToken(form.getEmail(), form.getPassword());
+			return getAuthenticationManager().authenticate(loginToken);
+		} catch (IOException e) {
+			throw new UsernameNotFoundException("User not parsed correctly", e);
+		}
 	}
 
 	@Override
@@ -39,7 +45,10 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 		tokenAuthenticationService.addAuthentication(response, authResult.getName());
 //		CsrfHeaderFilter.addCsrfCookie(response);
 		response.setStatus(HttpStatus.OK.value());
-//		ObjectMapper mapper = new ObjectMapper();
-//		response.getOutputStream().println(mapper.writeValueAsString(userDetailsService.loadUserByUsername(authResult.getName())));
+		try {
+			response.getOutputStream().println(objectMapper.writeValueAsString(DefaultResponse.builder().success(true).build()));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

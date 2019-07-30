@@ -5,6 +5,10 @@ CREATE TABLE `capelania`.`user` (
   `name` VARCHAR(250) NOT NULL,
   `status` VARCHAR(250) NULL DEFAULT 'CREATED',
   `active` TINYINT NULL DEFAULT 0,
+  `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_by` bigint(20) unsigned NOT NULL,
+  `updated_date` timestamp NULL ON UPDATE CURRENT_TIMESTAMP,
+  `updated_by` bigint(20) unsigned NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `UNIQUE_USER_EMAIL` (`email` ASC));
 

@@ -1,5 +1,7 @@
 package com.capelania.config;
 
+import static com.capelania.config.security.TokenAuthenticationService.COOKIE_AUTH_NAME;
+
 import com.capelania.config.exception.GlobalExceptionHandler;
 import com.capelania.config.filter.AuthenticationFilter;
 import com.capelania.config.filter.LoginFilter;
@@ -27,8 +29,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     private TokenAuthenticationService tokenAuthenticationService;
     @Autowired
     private ObjectMapper objectMapper;
-    @Autowired
-    private GlobalExceptionHandler globalExceptionHandler;
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -68,6 +68,11 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
                 .addFilterBefore(new LoginFilter(tokenAuthenticationService, authenticationManager(), objectMapper), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new AuthenticationFilter(tokenAuthenticationService), UsernamePasswordAuthenticationFilter.class)
-            .exceptionHandling().accessDeniedHandler(accessDeniedHandler()).authenticationEntryPoint(authenticationEntryPoint());
+            .exceptionHandling().accessDeniedHandler(accessDeniedHandler()).authenticationEntryPoint(authenticationEntryPoint())
+            .and()
+                .logout()
+                .logoutUrl("/public/logout")
+                .logoutSuccessUrl("/public/logout/success")
+                .deleteCookies(COOKIE_AUTH_NAME);
     }
 }
