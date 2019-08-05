@@ -1,9 +1,12 @@
 package com.capelania.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +14,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @MappedSuperclass
-public abstract class EntityJpa {
+public abstract class EntityJpa implements Serializable {
 
 	@Basic
 	@Column(name = "created_date", nullable = false, updatable = false)
@@ -33,6 +36,10 @@ public abstract class EntityJpa {
 	
 	@Column(columnDefinition="tinyint(1) default 0")
 	private boolean active = false;
+
+	@Column
+	@Enumerated(EnumType.STRING)
+	private Status status;
 
 	public abstract Long getId();
 }

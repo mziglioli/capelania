@@ -19,18 +19,33 @@ import lombok.ToString;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = false, of = { "name" })
-@ToString(of = { "id", "name" })
+@EqualsAndHashCode(callSuper = false, of = { "day", "start" })
+@ToString(of = { "title", "description", "day", "start", "duration" })
 @Entity
-@Table(name = "role", uniqueConstraints = { @UniqueConstraint(columnNames = { "name" }) })
-public class Role extends EntityJpa {
+@Table(name = "mass", uniqueConstraints = { @UniqueConstraint(columnNames = { "day", "start" }) })
+public class Mass extends EntityJpa {
 
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     @NotEmpty
-    private String name;
+    private String title;
+
+    @Column(nullable = false)
+    @NotEmpty
+    private String description;
+
+    @Column(nullable = false, length = 20)
+    @NotEmpty
+    private String day;
+
+    @Column(nullable = false)
+    @NotEmpty
+    private String start;
+
+    @Column(nullable = false)
+    private Integer duration;
 }

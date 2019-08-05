@@ -1,46 +1,52 @@
 package com.capelania.service;
 
+import com.capelania.form.UserForm;
+import com.capelania.model.Role;
 import com.capelania.model.User;
+import com.capelania.repository.RoleRepository;
 import com.capelania.repository.UserRepository;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService {
+public class UserService extends DefaultService<User, UserRepository, UserForm> {
 
-    private UserRepository userRepository;
+    private RoleRepository roleRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserService(UserRepository repository, RoleRepository roleRepository) {
+        super(repository);
+        this.roleRepository = roleRepository;
     }
 
     public List<User> findAll() {
-        return userRepository.findAll();
+        return getRepository().findAll();
     }
 
     public User findByUsername(String username) {
-        return userRepository.findByEmail(username);
+        return getRepository().findByEmail(username);
     }
 
-    public User getAuthenticatedUser() throws AccessDeniedException {
-        try {
-            SecurityContext context = SecurityContextHolder.getContext();
-            if (context != null) {
-                Authentication auth = context.getAuthentication();
-                if (auth != null && !(auth instanceof AnonymousAuthenticationToken)) {
-                    return (User) SecurityContextHolder.getContext().getAuthentication().getDetails();
-                }
-            }
-            return null;
-        } catch (Exception e) {
-            throw new AccessDeniedException("Error get authenticated user");
-        }
+    @Override
+    protected User addConvert(UserForm form) {
+        User user = super.addConvert(form);
+        user.setRoles(getRoles(form.getRoles()));
+        return user;
+    }
+
+    private List<Role> getRoles(List<Long> ids) {
+        // no id = 1 allowed 1 = ADMIN
+        List<Long> findIds = ids.stream()
+            .filter(r -> r != 1).collect(Collectors.toList());
+        return roleRepository.findAllByIdIn(findIds);
+    }
+
+    @Override
+    protected User updateConvert(UserForm form) {
+        User user = super.updateConvert(form);
+        user.setRoles(getRoles(form.getRoles()));
+        return user;
     }
 }

@@ -7,8 +7,6 @@ import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -59,10 +57,6 @@ public class User extends EntityJpa implements UserDetails {
 	@Column
 	private String password;
 
-	@Column
-	@Enumerated(EnumType.STRING)
-	private Status status;
-
 	@ManyToMany(cascade= CascadeType.MERGE, fetch = FetchType.EAGER)
 	@JoinTable(
 		name="user_role",
@@ -107,4 +101,5 @@ public class User extends EntityJpa implements UserDetails {
     public boolean isEnabled() {
         return isActive();
     }
+
 }

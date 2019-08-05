@@ -1,9 +1,9 @@
 CREATE TABLE `capelania`.`user` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
-  `email` VARCHAR(250) NOT NULL,
-  `password` VARCHAR(250) NOT NULL,
-  `name` VARCHAR(250) NOT NULL,
-  `status` VARCHAR(250) NULL DEFAULT 'CREATED',
+  `email` VARCHAR(255) NOT NULL,
+  `password` VARCHAR(255) NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  `status` VARCHAR(255) NULL DEFAULT 'CREATED',
   `active` TINYINT NULL DEFAULT 0,
   `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created_by` bigint(20) unsigned NOT NULL,
@@ -14,7 +14,13 @@ CREATE TABLE `capelania`.`user` (
 
 CREATE TABLE `capelania`.`role` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(250) NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  `status` VARCHAR(255) NULL DEFAULT 'CREATED',
+  `active` TINYINT NULL DEFAULT 1,
+  `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_by` bigint(20) unsigned NULL DEFAULT 1,
+  `updated_date` timestamp NULL ON UPDATE CURRENT_TIMESTAMP,
+  `updated_by` bigint(20) unsigned NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `UNIQUE_ROLE_NAME` (`name` ASC));
 

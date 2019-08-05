@@ -11,4 +11,9 @@ public class LogoutController {
     public DefaultResponse logout(){
         return DefaultResponse.builder().success(true).build();
     }
+
+    @GetMapping("/public/test")
+    public String test(){
+        return "Test";
+    }
 }
