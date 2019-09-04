@@ -20,19 +20,20 @@ public class UserForm extends DefaultForm{
 	@ValidEmail
 	private String email;
 	@NotEmpty(message = "validator.invalid.password")
-	private String password;
+	private String pass;
 	@NotEmpty(message = "validator.invalid.roles")
-	private List<Long> roles;
+	private String allRoles;
 
 	@Override
 	public User convertToEntity() {
 		User user = new User();
 		if (getId() != 0) {
 			user.setId(getId());
-		}
-		user.setEmail(getEmail());
-		user.setPassword(getPassword());
-		user.setName(getName());
+		} else {
+            user.setPassword(pass);
+        }
+		user.setEmail(email);
+		user.setName(name);
 		return user;
 	}
 }

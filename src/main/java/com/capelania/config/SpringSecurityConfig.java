@@ -7,6 +7,7 @@ import com.capelania.config.filter.AuthenticationFilter;
 import com.capelania.config.filter.LoginFilter;
 import com.capelania.config.security.AccessDeniedHandlerImpl;
 import com.capelania.config.security.AuthenticationEntryPointImpl;
+import com.capelania.config.security.SimpleCorsFilter;
 import com.capelania.config.security.TokenAuthenticationService;
 import com.capelania.config.security.UserRoleService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,6 +21,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -68,6 +70,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
                 .anyRequest().authenticated()
             .and()
+                .addFilterBefore(new SimpleCorsFilter(), ChannelProcessingFilter.class)
                 .addFilterBefore(new LoginFilter(tokenAuthenticationService, authenticationManager(), objectMapper), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new AuthenticationFilter(tokenAuthenticationService), UsernamePasswordAuthenticationFilter.class)
             .exceptionHandling().accessDeniedHandler(accessDeniedHandler()).authenticationEntryPoint(authenticationEntryPoint())

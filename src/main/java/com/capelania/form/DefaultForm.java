@@ -12,7 +12,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class DefaultForm {
 
-	private long id;
+    protected long id;
+    protected boolean active;
 
 	public EntityJpa convertToEntity() {
 		return new EntityJpa() {

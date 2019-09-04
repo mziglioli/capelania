@@ -1,6 +1,7 @@
 package com.capelania.model;
 
-import com.capelania.enums.DayValue;
+import java.time.LocalDateTime;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,11 +21,11 @@ import lombok.ToString;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = false, of = { "day", "start" })
-@ToString(of = { "title", "description", "day", "start", "duration" })
+@EqualsAndHashCode(callSuper = false, of = { "title", "date" })
+@ToString(of = { "title", "description", "header", "text", "footer", "date", "expire" })
 @Entity
-@Table(name = "mass", uniqueConstraints = { @UniqueConstraint(columnNames = { "day", "start" }) })
-public class Mass extends EntityJpa {
+@Table(name = "feed", uniqueConstraints = { @UniqueConstraint(columnNames = { "title", "date" }) })
+public class Feed extends EntityJpa {
 
     @Id
     @Column
@@ -39,27 +40,22 @@ public class Mass extends EntityJpa {
     @NotEmpty
     private String description;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false)
     @NotEmpty
-    private String day;
+    private String header;
 
     @Column(nullable = false)
     @NotEmpty
-    private String start;
-
-    @Column(nullable = false)
-    private Integer duration;
-
-    @Column
-    private boolean weekly;
+    private String text;
 
     @Column(nullable = false)
     @NotEmpty
+    private String footer;
+
+    @Column(nullable = false)
     private String date;
 
-    private transient int dayValue;
+    @Column(nullable = false)
+    private String expire;
 
-    public int getDayValue() {
-        return DayValue.getValue(day);
-    }
 }

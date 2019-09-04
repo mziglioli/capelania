@@ -57,12 +57,16 @@ public class User extends EntityJpa implements UserDetails {
 	@Column
 	private String password;
 
+    @JsonIgnore
 	@ManyToMany(cascade= CascadeType.MERGE, fetch = FetchType.EAGER)
 	@JoinTable(
 		name="user_role",
 		joinColumns={@JoinColumn(name="user_id", referencedColumnName="id")},
 		inverseJoinColumns={@JoinColumn(name="role_id", referencedColumnName="id")})
 	private List<Role> roles;
+
+	private transient String allRoles;
+    private transient String pass;
 
     @Override
 	@JsonIgnore
@@ -102,4 +106,13 @@ public class User extends EntityJpa implements UserDetails {
         return isActive();
     }
 
+    public String getAllRoles() {
+        return roles.stream()
+            .map(Role::getName)
+            .collect(Collectors.joining(","));
+    }
+
+    public String getPass() {
+        return "*******";
+    }
 }

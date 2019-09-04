@@ -7,6 +7,7 @@ import com.capelania.repository.RoleRepository;
 import com.capelania.repository.UserRepository;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,21 +33,35 @@ public class UserService extends DefaultService<User, UserRepository, UserForm> 
     @Override
     protected User addConvert(UserForm form) {
         User user = super.addConvert(form);
-        user.setRoles(getRoles(form.getRoles()));
+        user.setRoles(getRoles(form.getAllRoles()));
         return user;
     }
 
-    private List<Role> getRoles(List<Long> ids) {
-        // no id = 1 allowed 1 = ADMIN
-        List<Long> findIds = ids.stream()
-            .filter(r -> r != 1).collect(Collectors.toList());
-        return roleRepository.findAllByIdIn(findIds);
+    private List<Role> getRoles(String roles) {
+        List<String> findNames = Stream.of(roles.split(","))
+            .filter(r -> !"ROLE_ADMIN".equals(r))
+            .collect(Collectors.toList());
+        return roleRepository.findAllByNameIn(findNames);
     }
 
     @Override
     protected User updateConvert(UserForm form) {
         User user = super.updateConvert(form);
-        user.setRoles(getRoles(form.getRoles()));
+        user.setRoles(getRoles(form.getAllRoles()));
         return user;
+    }
+
+    @Override
+    public void update(UserForm form) {
+        if(form.getId() != 1){
+            super.update(form);
+        }
+    }
+
+    @Override
+    public void delete(Long id) {
+        if(id != 1){
+            super.delete(id);
+        }
     }
 }

@@ -26,6 +26,8 @@ public class MassForm extends DefaultForm {
 	//	duration in minutes
 	@Min(value = 1, message = "validator.invalid.duration")
 	private Integer duration;
+	private boolean weekly;
+    private String date;
 
 	@Override
 	public EntityJpa convertToEntity() {
@@ -38,6 +40,9 @@ public class MassForm extends DefaultForm {
 		mass.setDuration(duration);
 		mass.setStart(start);
 		mass.setTitle(title);
+		mass.setActive(active);
+		mass.setDate(date);
+		mass.setWeekly(weekly);
 		return mass;
 	}
 }

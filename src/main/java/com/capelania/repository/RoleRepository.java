@@ -6,4 +6,5 @@ import java.util.List;
 public interface RoleRepository extends DefaultRepository<Role> {
 
 	List<Role> findAllByIdIn(List<Long> ids);
+    List<Role> findAllByNameIn(List<String> names);
 }

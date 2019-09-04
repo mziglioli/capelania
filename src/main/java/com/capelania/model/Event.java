@@ -1,6 +1,5 @@
 package com.capelania.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,18 +19,32 @@ import lombok.ToString;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = false, of = { "name" })
-@ToString(of = { "id", "name" })
+@EqualsAndHashCode(callSuper = false, of = { "title", "date" })
+@ToString(of = { "title", "description", "text", "img", "date" })
 @Entity
-@Table(name = "role", uniqueConstraints = { @UniqueConstraint(columnNames = { "name" }) })
-public class Role extends EntityJpa {
+@Table(name = "event", uniqueConstraints = { @UniqueConstraint(columnNames = { "title", "date" }) })
+public class Event extends EntityJpa {
 
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     @NotEmpty
-    private String name;
+    private String title;
+
+    @Column(nullable = false)
+    @NotEmpty
+    private String description;
+
+    @Column(nullable = false)
+    @NotEmpty
+    private String text;
+
+    @Column
+    private String img;
+
+    @Column(nullable = false)
+    private String date;
 }

@@ -5,10 +5,12 @@ import com.capelania.model.EntityJpa;
 import com.capelania.model.User;
 import com.capelania.repository.DefaultRepository;
 import java.util.Collection;
+import java.util.List;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.AccessDeniedException;
@@ -53,25 +55,21 @@ public abstract class DefaultService<T extends EntityJpa, R extends DefaultRepos
 	}
 
 	@Transactional
-	public void delete(F form) {
-		log.info("Delete form: " + form.toString());
-		T entity = updateConvert(form);
-		repository.delete(entity, getAuthenticatedUserId());
-		log.info("Deleted entity: " + entity.toString());
-	}
-
-	@Transactional
 	public void delete(Long id) {
 		log.info("delete by id " + id);
-		T entity = repository.delete(id, getAuthenticatedUserId());
+		repository.delete(id, getAuthenticatedUserId());
 	}
 
 	public Collection<T> findAll() {
 		return repository.findAll();
 	}
 
-	public Page<T> find(Pageable pageable) {
-		return repository.findAll(pageable);
+    public List<T> findAllActive() {
+        return repository.findAllByActive(true);
+    }
+
+	public Page<T> find(int page, int size) {
+		return repository.findAll(PageRequest.of(page, size));
 	}
 
 	public Page<T> find(String search, Pageable pageable) {
@@ -108,4 +106,5 @@ public abstract class DefaultService<T extends EntityJpa, R extends DefaultRepos
 	public T findById(long id) {
 		return repository.findById(id).orElse(null);
 	}
+
 }

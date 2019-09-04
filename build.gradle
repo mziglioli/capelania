@@ -36,6 +36,9 @@ dependencies {
 	implementation "io.springfox:springfox-swagger-ui:2.0.1"
 	implementation 'org.flywaydb:flyway-core'
 
+    compile 'org.apache.commons:commons-lang3:3.5'
+    compile 'commons-lang:commons-lang:2.2'
+
 	//compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
 	compile 'io.jsonwebtoken:jjwt-api:0.10.5'
 	runtime 'io.jsonwebtoken:jjwt-impl:0.10.5', 'io.jsonwebtoken:jjwt-jackson:0.10.5'
