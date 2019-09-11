@@ -19,10 +19,10 @@ public class MassUtils {
         return buildMass(id, true, day, "", start, 60, true);
     }
     public static Mass buildEasterMass(long id) {
-        return buildMass(id, false, "Sunday","12/04", "10:00 am", 60, true);
+        return buildMass(id, false, "Sunday","04-04", "10:00 am", 60, true);
     }
     public static Mass buildChristmassMass(long id) {
-        return buildMass(id, false, "Wednesday", "25/12", "10:00 am", 60, true);
+        return buildMass(id, false, "Wednesday", "12-25", "10:00 am", 60, true);
     }
 
     public static Mass buildMass(long id, boolean weekly, String day, String date, String start, int duration, boolean active) {

@@ -1,5 +1,7 @@
 package com.capelania.enums;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
@@ -24,5 +26,23 @@ public enum DayValue {
             .filter(dayValue -> StringUtils.equalsIgnoreCase(dayValue.name(), day))
             .findFirst()
             .orElse(DayValue.SUNDAY).getValue();
+    }
+
+    public static int getValue(String day, int dayOfTheWeek) {
+        int dayValue = getValue(day);
+
+        if (dayValue < dayOfTheWeek) {
+            return dayValue + 10;
+        }
+
+        return dayValue;
+    }
+
+    public static int getValueFromToday(String day, LocalDate localDate) {
+        return getValue(day, localDate.getDayOfWeek().getValue());
+    }
+
+    public static int getValueFromToday(String day) {
+        return getValueFromToday(day, LocalDate.now());
     }
 }

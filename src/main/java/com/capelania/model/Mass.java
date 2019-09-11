@@ -9,12 +9,18 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotEmpty;
+
+import com.capelania.utils.DateUtils;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -60,6 +66,10 @@ public class Mass extends EntityJpa {
     private transient int dayValue;
 
     public int getDayValue() {
-        return DayValue.getValue(day);
+        return DayValue.getValueFromToday(day);
+    }
+
+    public int getDayValue(LocalDate localDate) {
+        return DayValue.getValueFromToday(day, localDate);
     }
 }

@@ -4,10 +4,13 @@ import com.capelania.form.MassForm;
 import com.capelania.model.Mass;
 import com.capelania.repository.MassRepository;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.capelania.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,13 +37,23 @@ public class MassService extends DefaultService<Mass, MassRepository, MassForm> 
             .collect(Collectors.toList());
     }
 
-    //TODO
+    /**
+     * Find the Mass for 7 days
+     * */
     public List<Mass> findAllUpComing() {
-        LocalDateTime localDateTime = LocalDateTime.now();
-        DayOfWeek dayOfWeek = localDateTime.getDayOfWeek();
-//        from 1 (Monday) to 7 (Sunday).
-        int dayValue = dayOfWeek.getValue();
+        return findAllUpComing(LocalDate.now());
+    }
 
-        return findAllActive();
+    public List<Mass> findAllUpComing(LocalDate today) {
+        return findAllActive()
+                .stream()
+                .filter(m -> m.isWeekly() || isMassDateInRange(today, m))
+                .sorted(Comparator.comparing(m -> m.getDayValue(today)))
+                .collect(Collectors.toList());
+    }
+
+    protected boolean isMassDateInRange(LocalDate today, Mass mass) {
+        LocalDate dbDate = DateUtils.parseDbDate(today, mass.getDate());
+        return DateUtils.isInOneWeekTime(today, dbDate);
     }
 }
