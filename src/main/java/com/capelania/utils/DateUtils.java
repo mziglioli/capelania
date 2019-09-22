@@ -1,5 +1,7 @@
 package com.capelania.utils;
 
+import com.capelania.model.Event;
+
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 import java.time.DayOfWeek;
@@ -20,12 +22,38 @@ public class DateUtils {
     public static String parse(LocalDateTime dateTime) {
         try{
             if (dateTime == null) {
-                return LocalDateTime.now().format(DATE_FORMATER);
+                return LocalDateTime.now().format(DATE_TIME_FORMATER);
             }
-            return dateTime.format(DATE_FORMATER);
+            return dateTime.format(DATE_TIME_FORMATER);
         }catch (Exception e) {
             e.printStackTrace();
             return "";
+        }
+    }
+
+    /**
+     * Parse LocalDateTime.now() to string
+     * @return string in the format "yyyy-MM-dd HH:mm"}
+     * */
+    public static String parse() {
+        return parse(LocalDateTime.now());
+    }
+
+    /**
+     * Parse string to {@link LocalDateTime}
+     * @param now localDateTime
+     * @param dateTime need to be in a format "yyyy-MM-dd HH:mm"
+     * @return LocalDateTime for the datetime or from now
+     * */
+    public static LocalDateTime parse(LocalDateTime now, String dateTime) {
+        try{
+            if (isBlank(dateTime)) {
+                return now;
+            }
+            return LocalDateTime.parse(dateTime, DATE_TIME_FORMATER);
+        }catch (Exception e) {
+            e.printStackTrace();
+            return now;
         }
     }
 
@@ -35,15 +63,7 @@ public class DateUtils {
      * @return LocalDateTime for the datetime or from {@link LocalDateTime#now()}
      * */
     public static LocalDateTime parse(String dateTime) {
-        try{
-            if (isBlank(dateTime)) {
-                return LocalDateTime.now();
-            }
-            return LocalDateTime.parse(dateTime, DATE_FORMATER);
-        }catch (Exception e) {
-            e.printStackTrace();
-            return LocalDateTime.now();
-        }
+        return parse(LocalDateTime.now(), dateTime);
     }
 
     /**
@@ -66,7 +86,6 @@ public class DateUtils {
     }
 
     public static boolean isInTime(LocalDate today, LocalDate date, int qtdeDays) {
-
         if(today != null && date != null) {
             return (date.isAfter(today) || date.isEqual(today)) && date.isBefore(today.plusDays(qtdeDays));
         }
@@ -75,6 +94,15 @@ public class DateUtils {
 
     public static boolean isInOneWeekTime(LocalDate today, LocalDate date) {
         return isInTime(today, date, 7);
+    }
+
+    public static boolean isInOneWeekTime(LocalDateTime today, LocalDateTime date) {
+        return isInTime(today.toLocalDate(), date.toLocalDate(), 7);
+    }
+
+    protected boolean isStringDateInRange(LocalDate today, String date) {
+        LocalDate dbDate = DateUtils.parseDbDate(today, date);
+        return DateUtils.isInOneWeekTime(today, dbDate);
     }
 
 }
