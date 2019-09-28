@@ -11,6 +11,7 @@ import java.time.format.DateTimeFormatter;
 
 public class DateUtils {
 
+    private final static DateTimeFormatter DATE_TIME_FORMATER_DISPLAY = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
     private final static DateTimeFormatter DATE_TIME_FORMATER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     private final static DateTimeFormatter DATE_FORMATER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -19,12 +20,12 @@ public class DateUtils {
      * @param dateTime
      * @return string in the format "yyyy-MM-dd HH:mm"}
      * */
-    public static String parse(LocalDateTime dateTime) {
+    public static String parse(LocalDateTime dateTime, DateTimeFormatter formatter) {
         try{
             if (dateTime == null) {
-                return LocalDateTime.now().format(DATE_TIME_FORMATER);
+                return LocalDateTime.now().format(formatter);
             }
-            return dateTime.format(DATE_TIME_FORMATER);
+            return dateTime.format(formatter);
         }catch (Exception e) {
             e.printStackTrace();
             return "";
@@ -36,7 +37,17 @@ public class DateUtils {
      * @return string in the format "yyyy-MM-dd HH:mm"}
      * */
     public static String parse() {
-        return parse(LocalDateTime.now());
+        return parse(LocalDateTime.now(), DATE_TIME_FORMATER);
+    }
+
+    /**
+     * Parse LocalDateTime.now() to string
+     * @param date  string in the format "yyyy-MM-dd HH:mm"}
+     * @return string in the format "dd/MM/yyyy HH:mm"}
+     * */
+    public static String parseDisplay(String date) {
+        LocalDateTime localDateTime = parse(date);
+        return parse(localDateTime, DATE_TIME_FORMATER_DISPLAY);
     }
 
     /**
@@ -104,5 +115,4 @@ public class DateUtils {
         LocalDate dbDate = DateUtils.parseDbDate(today, date);
         return DateUtils.isInOneWeekTime(today, dbDate);
     }
-
 }

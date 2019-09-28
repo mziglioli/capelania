@@ -10,6 +10,7 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotEmpty;
 
 import com.capelania.enums.DayValue;
+import com.capelania.utils.DateUtils;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -18,6 +19,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDate;
+
+import static com.capelania.utils.DateUtils.parseDisplay;
 
 @Getter
 @Setter
@@ -51,4 +54,8 @@ public class Event extends EntityJpa {
 
     @Column(nullable = false)
     private String date;
+
+    public String getDateDisplay() {
+        return parseDisplay(date);
+    }
 }

@@ -1,0 +1,15 @@
+CREATE TABLE `capelania`.`opening` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `day` VARCHAR(10) NOT NULL,
+  `start_am` VARCHAR(5) NULL DEFAULT '08:00',
+  `end_am` VARCHAR(5) NULL DEFAULT '12:00',
+  `start_pm` VARCHAR(5) NULL DEFAULT '13:00',
+  `end_pm` VARCHAR(5) NULL DEFAULT '17:00',
+  `status` VARCHAR(20) NULL DEFAULT 'CREATED',
+  `active` TINYINT NULL DEFAULT 0,
+  `created_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_by` bigint(20) unsigned NOT NULL,
+  `updated_date` timestamp NULL ON UPDATE CURRENT_TIMESTAMP,
+  `updated_by` bigint(20) unsigned NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `UNIQUE_OPENING_day` (`day` ASC));

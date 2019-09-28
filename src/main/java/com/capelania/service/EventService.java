@@ -21,6 +21,14 @@ public class EventService extends DefaultService<Event, EventRepository, EventFo
         super(repository);
     }
 
+    @Override
+    public List<Event> findAllActive() {
+        return super.findAllActive().stream()
+                .sorted(Comparator.comparing(Event::getDate)
+                .reversed())
+                .collect(Collectors.toList());
+    }
+
     /**
      * Find the events for 7 days
      * */
