@@ -2,8 +2,10 @@ package com.capelania.controller;
 
 import com.capelania.form.OpeningForm;
 import com.capelania.model.Opening;
+import com.capelania.response.OpeningDefaultResponse;
 import com.capelania.service.OpeningService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,5 +16,10 @@ public class OpeningPublicController extends DefaultPublicController<OpeningServ
     @Autowired
     OpeningPublicController(OpeningService service){
         super(service);
+    }
+
+    @GetMapping("/all")
+    public OpeningDefaultResponse findAllUpComing(){
+        return service.getOpeniningHours();
     }
 }

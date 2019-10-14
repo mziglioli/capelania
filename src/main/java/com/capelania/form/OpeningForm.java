@@ -1,5 +1,6 @@
 package com.capelania.form;
 
+import com.capelania.enums.DayValue;
 import com.capelania.model.EntityJpa;
 import com.capelania.model.Event;
 import com.capelania.model.Opening;
@@ -33,7 +34,7 @@ public class OpeningForm extends DefaultForm {
         if (getId() != 0) {
             opening.setId(getId());
         }
-        opening.setDay(day);
+        opening.setDay(DayValue.getDayName(day));
         opening.setStartAm(startAm);
         opening.setEndAm(endAm);
         opening.setStartPm(startPm);

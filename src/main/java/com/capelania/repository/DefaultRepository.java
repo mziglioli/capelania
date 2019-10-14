@@ -78,6 +78,7 @@ public interface DefaultRepository<T extends EntityJpa>  extends JpaRepository<T
     }
 
     default void beforeUpdate(T entity, long userId) {
+        entity.setStatus(Status.UPDATED);
         entity.setUpdatedBy(userId);
         entity.setUpdatedDate(LocalDateTime.now());
     }

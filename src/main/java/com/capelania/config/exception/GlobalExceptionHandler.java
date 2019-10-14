@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.hibernate.exception.ConstraintViolationException;
+import org.hibernate.exception.SQLGrammarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -62,6 +65,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
     @ExceptionHandler(AccessDeniedException.class)
     public void handleAccessDenied(HttpServletRequest request, HttpServletResponse response, Exception ex) {
+        handleException(request, response, ex, HttpStatus.FORBIDDEN);
+    }
+    @ExceptionHandler(SQLGrammarException.class)
+    public void handleAccessDenied(HttpServletRequest request, HttpServletResponse response, SQLGrammarException ex) {
         handleException(request, response, ex, HttpStatus.FORBIDDEN);
     }
 

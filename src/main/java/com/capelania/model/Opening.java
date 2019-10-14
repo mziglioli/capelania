@@ -1,5 +1,6 @@
 package com.capelania.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -39,4 +40,9 @@ public class Opening extends EntityJpa {
     @Column(nullable = false, length = 5, name = "end_pm")
     @NotEmpty
     private String endPm;
+
+    @JsonIgnore
+    public String combineTime() {
+        return startAm + endAm + startPm + endPm;
+    }
 }

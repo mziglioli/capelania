@@ -7,5 +7,5 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum Status {
 
-	CREATED, DELETED;
+	CREATED, DELETED, UPDATED;
 }

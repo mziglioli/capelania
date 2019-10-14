@@ -3,6 +3,7 @@ package com.capelania.enums;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -45,4 +46,12 @@ public enum DayValue {
     public static int getValueFromToday(String day) {
         return getValueFromToday(day, LocalDate.now());
     }
+
+    public static String getDayName(String day){
+        Optional<DayValue> op = Stream.of(DayValue.values())
+                .filter(dayValue -> StringUtils.equalsIgnoreCase(dayValue.name(), day))
+                .findFirst();
+        return op.isPresent() ? op.get().name() : "";
+    }
+
 }
