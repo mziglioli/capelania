@@ -59,8 +59,7 @@ public class Mass extends EntityJpa {
     @Column
     private boolean weekly;
 
-    @Column(nullable = false)
-    @NotEmpty
+    @Column
     private String date;
 
     private transient int dayValue;

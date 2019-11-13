@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.hibernate.exception.ConstraintViolationException;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.SQLGrammarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
@@ -34,6 +34,7 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+@Slf4j
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -159,21 +160,22 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 sb.append(" | ");
             });
         }
-//        log.error(sb.toString());
+        log.error(sb.toString());
     }
 
     private void logException(Exception ex, HttpServletRequest request){
         StringBuilder sb = new StringBuilder();
         sb.append("LOG:");
-        sb.append(String.format("method:", request.getMethod()));
-        sb.append(String.format("uri:", request.getRequestURI()));
+        sb.append(String.format("method:%s", request.getMethod()));
+        sb.append(String.format("uri:%s", request.getRequestURI()));
         try{
             if(request.getQueryString() != null){
-                sb.append(String.format("params:", request.getQueryString()));
+                sb.append(String.format("params:%s", request.getQueryString()));
             }
-//            log.error(sb.toString());
+            sb.append(String.format("msg:%s", ex.getMessage()));
+            log.error(sb.toString(), ex);
         }catch (Exception e){
-//            log.error(sb.toString(), ex);
+            log.error(sb.toString(), e);
         }
     }
 
