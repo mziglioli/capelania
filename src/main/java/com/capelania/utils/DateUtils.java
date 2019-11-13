@@ -107,8 +107,8 @@ public class DateUtils {
         return isInTime(today, date, 7);
     }
 
-    public static boolean isInOneWeekTime(LocalDateTime today, LocalDateTime date) {
-        return isInTime(today.toLocalDate(), date.toLocalDate(), 7);
+    public static boolean isInTwoWeekTime(LocalDateTime today, LocalDateTime date) {
+        return isInTime(today.toLocalDate(), date.toLocalDate(), 14);
     }
 
     protected boolean isStringDateInRange(LocalDate today, String date) {

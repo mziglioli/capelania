@@ -33,7 +33,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false, of = { "id" })
-@ToString(callSuper = false, of = { "id", "name", "email", "status", "active" })
+@ToString(callSuper = false, of = { "id", "name", "email" })
 @Entity
 @Table(name = "user", uniqueConstraints = { @UniqueConstraint(columnNames = { "email" }) })
 public class User extends EntityJpa implements UserDetails {

@@ -46,7 +46,7 @@ public class EventService extends DefaultService<Event, EventRepository, EventFo
 
     protected boolean isEventDateInRange(LocalDateTime today, Event event) {
         LocalDateTime dbDate = DateUtils.parse(today, event.getDate());
-        return DateUtils.isInOneWeekTime(today, dbDate);
+        return DateUtils.isInTwoWeekTime(today, dbDate);
     }
 
 }
